@@ -78,6 +78,7 @@ enum Jailbreak: String, Codable {
         return
         #endif
                 
+        let dopamine = URL(fileURLWithPath: "/var/jb/.installed_dopamine")
         let checkra1n = URL(fileURLWithPath: "/var/checkra1n.dmg")
         let bakera1n = URL(fileURLWithPath: "/cores/binpack/.installed_overlay")
         let palera1n = URL(fileURLWithPath: "/cores/jbloader")
@@ -86,7 +87,6 @@ enum Jailbreak: String, Codable {
         let xina = URL(fileURLWithPath: "/var/jb/.installed_xina15")
         let xina_Legacy = URL(fileURLWithPath: "/var/Liy/.procursus_strapped")
         let fugu15_max = URL(fileURLWithPath: "/var/jb/.installed_fugu15max")
-        let dopamine = URL(fileURLWithPath: "/var/jb/.installed_dopamine")
         
         let unc0ver = URL(fileURLWithPath: "/.installed_unc0ver")
         let taurine = URL(fileURLWithPath: "/taurine/jailbreakd")
@@ -109,8 +109,15 @@ enum Jailbreak: String, Codable {
             } else {
                 self = .bakera1n
             }
-            
-            // palera1n [rootful, rootless]
+
+        case dopamine.exists && arm64e:
+            self = .dopamine
+            return
+
+        case dopamine.exists && !arm64e:
+            self = .dopamine
+            return
+
         case palera1n.exists && !arm64e:
             if Bootstrap.procursus_rootless {
                 self = .palera1n_rootless
@@ -137,10 +144,6 @@ enum Jailbreak: String, Codable {
             
         case fugu15_max.exists && arm64e:
             self = .fugu15
-            return
-            
-        case dopamine.exists && arm64e:
-            self = .dopamine
             return
             
             // 14.x- jailbreaks
